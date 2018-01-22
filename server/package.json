@@ -1,0 +1,21 @@
+{
+  "name": "rekognition",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.117.0",
+    "body-parser": "^1.18.2",
+    "buffer": "^5.0.7",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "image-size": "^0.6.2",
+    "multer": "^1.3.0",
+    "pug": "^2.0.0-rc.4"
+  }
+}

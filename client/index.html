@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106869187-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-106869187-1');
+</script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bubba Genie</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/freelancer.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Bubba Genie</a>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container">
+        <img class="img-fluid" src="img/profile.png" alt="">
+        <div class="intro-text">
+          <span class="name">Let me guess your age.</span>
+        </div>
+        <div><p>Upload a photo, and I'll guess your age using Machine Learning (aka Magic).</p></div>
+        <div>
+            <form id="uploadForm" encType="multipart/form-data" method='POST'>
+            <input type='file' name="sampleFile" id="sampleFile" /><br /><br />
+            </form>
+        </div>
+      </div>
+    </header>
+    
+    <div class="container collapse" id="image">
+       <div class="col-lg-12 ml-auto text-center">
+          <img id="blah" src="#" style="max-height: 400px; max-width: 400px;"/>
+       </div>
+    </div>
+
+    <section class="success" id="about">
+    <div class="container collapse" id="waiting">
+        <br /><br />
+        <div class="col-lg-12 ml-auto text-center">
+            <i class="fa fa-refresh fa-spin" style="font-size:80px"></i>
+            <br /><br />
+        </div>
+    </div>
+    
+    <div class="container collapse" id="details">
+       <br /><br />
+       <h2 class="text-center">Details</h2>
+       <hr class="star-light">
+       <div class="col-lg-12 ml-auto">
+          <table border=1 style="width: 50%; margin: 0px auto;" class="table">
+          <tr><td align=center>AgeRange:</td><td align=center id=agerange></td></tr>
+          <tr><td align=center>Gender:</td><td align=center id=gender></td></tr>
+          <tr><td align=center>Beard:</td><td align=center id=beard></td></tr>
+          <tr><td align=center>Mustache:</td><td align=center id=mustache></td></tr>
+          <tr><td align=center>Smile:</td><td align=center id=smile></td></tr>
+          <tr><td align=center>Emotions:</td><td align=center id=emotions></td></tr>
+          </table>
+       </div>
+       <br /><br />
+    </div>
+    </success>
+
+    <!-- Footer -->
+    <footer class="text-center">
+      <div class="footer-below">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              Made with &hearts; and LOLZ by Ray Terrill<br />
+              Like silly things like this? <a href="https://paypal.me/rayterrill/1" target="_blank">Buy me a beer electronically.</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top d-lg-none">
+      <a class="btn btn-primary js-scroll-trigger" href="#page-top">
+        <i class="fa fa-chevron-up"></i>
+      </a>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/freelancer.min.js"></script>
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            var imageData;
+            
+            reader.onload = function (e) {
+                imageData = e.target.result;
+                $('#blah').attr('src', e.target.result);
+                
+            var data = {};
+            data.image = imageData;
+            data.id = 3;
+            
+            var request = $.ajax({
+                method: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "http://ec2-35-164-99-121.us-west-2.compute.amazonaws.com:3000/upload",
+                data: JSON.stringify(data)
+            });
+            
+            $("#waiting").collapse("toggle");
+            
+            request.done(function(html) {
+                $("#waiting").collapse("toggle");
+                $("#details").collapse("toggle");
+                //alert(html);
+                $("#agerange").html(html.AgeRange.Low + " - " + html.AgeRange.High);
+                $("#gender").html(html.Gender.Value);
+                if (html.Beard.Value === true) {
+                   $("#beard").html('True');
+                } else {
+                   $("#beard").html('False');
+                }
+                if (html.Mustache.Value === true) {
+                   $("#mustache").html('True');
+                } else {
+                   $("#mustache").html('False');
+                }
+                if (html.Smile.Value === true) {
+                   $("#smile").html('True');
+                } else {
+                   $("#smile").html('False');
+                }
+                var emotionsLen = html.Emotions.length;
+                var emotions;
+                for (var i = 0; i < emotionsLen; i++) {
+                   if (html.Emotions[i].Confidence > 70) {
+                      if (emotions) {
+                         emotions = emotions + "," + html.Emotions[i].Type;
+                      } else {
+                         emotions = html.Emotions[i].Type
+                      }
+                   }
+                }
+                if (emotions) {
+                    $("#emotions").html(emotions);
+                } else {
+                    $("#emotions").html("Not confident enough to pick an emotion :(");
+                }
+
+            });
+            
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+            
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+
+        }
+    }
+
+    $("#sampleFile").change(function(){
+        readURL(this);
+        $("#image").collapse("show");
+        $("#details").collapse("hide");
+    });
+</script>
+  </body>
+
+</html>
